@@ -18,25 +18,32 @@ public class Player extends Entity {
         this.keyHandler = keyHandler;
 
         setDefaultConfigs();
-        //getPlayerAssets();
+        getPlayerAssets();
     }
 
     public void setDefaultConfigs() {
         x = 100;
         y = 100;
         speed = 5;
-        direction = "up";
+        direction = "down";
     }
 
-    /*public void getPlayerAssets(){
+    public void getPlayerAssets(){
         try {
 
-            pl = ImageIO.read((getClass().getResourceAsStream("player.png")));
+            up_left = ImageIO.read((getClass().getResourceAsStream("./player/up_left.gif")));
+            up_right = ImageIO.read((getClass().getResourceAsStream("./player/up_right.gif")));
+            up = ImageIO.read((getClass().getResourceAsStream("./player/up.gif")));
+            down_left = ImageIO.read((getClass().getResourceAsStream("./player/down_left.gif")));
+            down_right = ImageIO.read((getClass().getResourceAsStream("./player/down_right.gif")));
+            down = ImageIO.read((getClass().getResourceAsStream("./player/down.gif")));
+            left = ImageIO.read((getClass().getResourceAsStream("./player/left.gif")));
+            right = ImageIO.read((getClass().getResourceAsStream("./player/right.gif")));
 
         }catch (IOException e){
             e.printStackTrace();
         }
-    }*/
+    }
 
     public void update() {
         if (keyHandler.upPressed == true) {
@@ -59,27 +66,27 @@ public class Player extends Entity {
 
     public void draw(Graphics2D g2d) {
 
-        g2d.setColor(Color.BLUE);
-        g2d.drawString("FPS: " + gameBoard.FPS, 10, 25);
-        g2d.fillRect(x, y, gameBoard.tileSize, gameBoard.tileSize);
+        //g2d.setColor(Color.BLUE);
+        //g2d.drawString("FPS: " + gameBoard.FPS, 10, 25);
+        //g2d.fillRect(x, y, gameBoard.tileSize, gameBoard.tileSize);
 
-        /*BufferedImage image = null;
+        BufferedImage image = null;
 
         switch (direction){
             case "up":
-                image = pl;
+                image = up;
                 break;
             case "down":
-                image = pl;
+                image = down;
                 break;
             case "left":
-                image = pl;
+                image = left;
                 break;
             case "rigth":
-                image = pl;
+                image = right;
                 break;
         }
-        g2d.drawImage(image, x, y, gameBoard.tileSize, gameBoard.tileSize, null);*/
+        g2d.drawImage(image, x, y, gameBoard.tileSize, gameBoard.tileSize, null);
 
     }
 
