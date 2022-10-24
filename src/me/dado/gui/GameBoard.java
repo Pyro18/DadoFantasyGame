@@ -3,6 +3,7 @@ package me.dado.gui;
 import javax.swing.*;
 import java.awt.*;
 
+import me.dado.entity.Player;
 import me.dado.event.KeyHandler;
 
 
@@ -11,7 +12,7 @@ public class GameBoard extends JPanel implements Runnable {
     final int originaTileSize = 16; //16x16 assets
     final int scale = 3;
 
-    final int tileSize = originaTileSize * scale; //48x48 assets
+    public int tileSize = originaTileSize * scale; //48x48 assets
 
     final int maxScreenCollum = 16;
     final int maxScreenRow = 12;
@@ -20,10 +21,11 @@ public class GameBoard extends JPanel implements Runnable {
 
 
     // FPS
-    int FPS = 144;
+    public int FPS = 144;
     KeyHandler keyHandler = new KeyHandler();
-
     Thread gameThread;
+
+    Player player = new Player(this, keyHandler);
 
     // set player default position
     int playerX = 100;
@@ -37,7 +39,7 @@ public class GameBoard extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
-        System.out.println("[DEBUG] [GameBoard]: FPS: " + FPS);
+
     }
 
     public void startGameThread() {
@@ -49,7 +51,7 @@ public class GameBoard extends JPanel implements Runnable {
 
 
     //GAME LOOP the core of the game
-    @Override
+    /*@Override
     public void run() {
 
         double drawInterval = 1000000000 / FPS; //1 sec = 100000000 ns --> 1 sec per frame = 60frame
@@ -86,23 +88,49 @@ public class GameBoard extends JPanel implements Runnable {
         }
 
 
+    }*/
+
+    //GAME LOOP the core of the game
+    // https://stackoverflow.com/questions/67594462/java-game-loop-stutters
+    // Delta method
+    // More fast
+    @Override
+    public void run(){
+        double drawInterval = 1000000000 / FPS;
+        double delta = 0;
+        long currentTime;
+        long lastTime = System.nanoTime();
+        long timer = 0;
+        int drawFPS = 0;
+
+        while (gameThread != null){
+            currentTime = System.nanoTime();
+            delta += (currentTime - lastTime) / drawInterval; //how much time is it pass
+            timer += (currentTime - lastTime);
+
+            lastTime = currentTime;
+
+            if (delta >= 1){
+
+                // 1 update: update information such as charater position
+                update();
+
+                // 2 draw: draw the screen with the updated information
+                repaint();
+                delta--;
+                //drawFPS++;
+            }
+
+            if (timer >= 1000000000){
+                System.out.println("[DEBUG] [GameBoard]: FPS: " + drawFPS);
+                drawFPS = 0;
+                timer = 0;
+            }
+        }
     }
 
     public void update() {
-
-        if (keyHandler.upPressed == true) {
-            playerY -= playerSpeed;
-
-        } else if (keyHandler.downPressed == true) {
-            playerY += playerSpeed;
-
-        } else if (keyHandler.leftPressed == true) {
-            playerX -= playerSpeed;
-
-        } else if (keyHandler.rightPressed == true) {
-            playerX += playerSpeed;
-        }
-
+        player.update();  //
     }
 
     public void paintComponent(Graphics g) {
@@ -110,9 +138,8 @@ public class GameBoard extends JPanel implements Runnable {
 
         Graphics2D g2d = (Graphics2D) g; //cast
 
-        g2d.setColor(Color.BLUE);
+        player.draw(g2d);
 
-        g2d.fillRect(playerX, playerY, tileSize, tileSize);
 
         g2d.dispose(); // Dispose of this graphics context and relese any sysrem resource that is using
 
