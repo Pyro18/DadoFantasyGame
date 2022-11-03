@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Objects;
 
 public class Player extends Entity {
     GameBoard gameBoard;
@@ -28,62 +27,99 @@ public class Player extends Entity {
         direction = "down";
     }
 
-    public void getPlayerAssets(){
+    public void getPlayerAssets() {
         try {
 
-            up_left = ImageIO.read((getClass().getResourceAsStream("./player/up_left.gif")));
-            up_right = ImageIO.read((getClass().getResourceAsStream("./player/up_right.gif")));
-            up = ImageIO.read((getClass().getResourceAsStream("./player/up.gif")));
-            down_left = ImageIO.read((getClass().getResourceAsStream("./player/down_left.gif")));
-            down_right = ImageIO.read((getClass().getResourceAsStream("./player/down_right.gif")));
-            down = ImageIO.read((getClass().getResourceAsStream("./player/down.gif")));
-            left = ImageIO.read((getClass().getResourceAsStream("./player/left.gif")));
-            right = ImageIO.read((getClass().getResourceAsStream("./player/right.gif")));
+            up = ImageIO.read((getClass().getResourceAsStream("/player/up.png")));
+            up2 = ImageIO.read((getClass().getResourceAsStream("/player/up2.png")));
+            down = ImageIO.read((getClass().getResourceAsStream("/player/down.png")));
+            down2 = ImageIO.read((getClass().getResourceAsStream("/player/down2.png")));
+            left = ImageIO.read((getClass().getResourceAsStream("/player/left.png")));
+            left2 = ImageIO.read((getClass().getResourceAsStream("/player/left2.png")));
+            right = ImageIO.read((getClass().getResourceAsStream("/player/right.png")));
+            right2 = ImageIO.read((getClass().getResourceAsStream("/player/right2.png")));
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void update() {
-        if (keyHandler.upPressed == true) {
-            direction = "up";
-            y -= speed;
+        if (keyHandler.upPressed == true || keyHandler.downPressed == true || keyHandler.leftPressed == true || keyHandler.rightPressed == true) {
 
-        } else if (keyHandler.downPressed == true) {
-            direction = "down";
-            y += speed;
+            if (keyHandler.upPressed == true) {
+                direction = "up";
+                y -= speed;
 
-        } else if (keyHandler.leftPressed == true) {
-            direction = "left";
-            x -= speed;
+            } else if (keyHandler.downPressed == true) {
+                direction = "down";
+                y += speed;
 
-        } else if (keyHandler.rightPressed == true) {
-            direction = "right";
-            x += speed;
+            } else if (keyHandler.leftPressed == true) {
+                direction = "left";
+                x -= speed;
+
+            } else if (keyHandler.rightPressed == true) {
+                direction = "right";
+                x += speed;
+            }
+            assetCounter++;
+            if (assetCounter > 12) {
+                if (assetNumber == 1) {
+                    assetNumber = 2;
+
+                } else if (assetNumber == 2) {
+                    assetNumber = 1;
+                }
+                assetCounter = 0;
+            }
         }
     }
 
     public void draw(Graphics2D g2d) {
 
-        //g2d.setColor(Color.BLUE);
-        //g2d.drawString("FPS: " + gameBoard.FPS, 10, 25);
+        g2d.setColor(Color.BLUE);
+        g2d.drawString("[DEBUG] FPS: " + gameBoard.drawFPS, 10, 25);
         //g2d.fillRect(x, y, gameBoard.tileSize, gameBoard.tileSize);
 
         BufferedImage image = null;
 
-        switch (direction){
+        switch (direction) {
             case "up":
-                image = up;
+                if (assetNumber == 1) {
+                    image = up;
+                }
+                if (assetNumber == 2) {
+                    image = up2;
+                }
+
                 break;
+
             case "down":
-                image = down;
+                if (assetNumber == 1) {
+                    image = down;
+                }
+                if (assetNumber == 2) {
+                    image = down2;
+                }
                 break;
+
             case "left":
-                image = left;
+                if (assetNumber == 1) {
+                    image = left;
+                }
+                if (assetNumber == 2) {
+                    image = left2;
+                }
                 break;
-            case "rigth":
-                image = right;
+
+            case "right":
+                if (assetNumber == 1) {
+                    image = right;
+                }
+                if (assetNumber == 2) {
+                    image = right2;
+                }
                 break;
         }
         g2d.drawImage(image, x, y, gameBoard.tileSize, gameBoard.tileSize, null);

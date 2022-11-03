@@ -5,6 +5,7 @@ import java.awt.*;
 
 import me.dado.entity.Player;
 import me.dado.event.KeyHandler;
+import me.dado.tile.TileManager;
 
 
 public class GameBoard extends JPanel implements Runnable {
@@ -21,7 +22,10 @@ public class GameBoard extends JPanel implements Runnable {
 
 
     // FPS
-    public int FPS = 144;
+    public int FPS = 60;
+
+    TileManager tileManager = new TileManager(this);
+    public int drawFPS = 0;
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
 
@@ -30,11 +34,11 @@ public class GameBoard extends JPanel implements Runnable {
     // set player default position
     int playerX = 100;
     int playerY = 100;
-    int playerSpeed = 5;
+    int playerSpeed = 7;
 
     public GameBoard() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.BLACK);
+        this.setBackground(Color.WHITE);
         //this.setDebugGraphicsOptions(getDebugGraphicsOptions()); DEBUG
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
@@ -93,15 +97,16 @@ public class GameBoard extends JPanel implements Runnable {
     //GAME LOOP the core of the game
     // https://stackoverflow.com/questions/67594462/java-game-loop-stutters
     // Delta method
-    // More fast
-    @Override
+    // Faster
+ @Override
     public void run(){
         double drawInterval = 1000000000 / FPS;
         double delta = 0;
         long currentTime;
         long lastTime = System.nanoTime();
         long timer = 0;
-        int drawFPS = 0;
+
+        //System.out.println(System.nanoTime());
 
         while (gameThread != null){
             currentTime = System.nanoTime();
@@ -118,7 +123,7 @@ public class GameBoard extends JPanel implements Runnable {
                 // 2 draw: draw the screen with the updated information
                 repaint();
                 delta--;
-                //drawFPS++;
+                drawFPS++;
             }
 
             if (timer >= 1000000000){
@@ -137,7 +142,7 @@ public class GameBoard extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g; //cast
-
+        tileManager.draw(g2d);
         player.draw(g2d);
 
 
