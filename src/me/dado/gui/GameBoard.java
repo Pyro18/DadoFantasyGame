@@ -98,7 +98,8 @@ public class GameBoard extends JPanel implements Runnable {
     // https://stackoverflow.com/questions/67594462/java-game-loop-stutters
     // Delta method
     // Faster
- @Override
+
+    @Override
     public void run(){
         double drawInterval = 1000000000 / FPS;
         double delta = 0;
