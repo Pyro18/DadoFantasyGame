@@ -54,50 +54,7 @@ public class GameBoard extends JPanel implements Runnable {
     }
 
 
-    //GAME LOOP the core of the game
-    /*@Override
-    public void run() {
 
-        double drawInterval = 1000000000 / FPS; //1 sec = 100000000 ns --> 1 sec per frame = 60frame
-        double nextDrawTime = System.nanoTime() + drawInterval; // after pass 1sec the game loop start
-
-        while (gameThread != null) {
-
-            // 1 update: update information such as charater position
-            update();
-
-
-            // 2 draw: draw the screen with the updated information
-            repaint();
-
-
-            try {
-                double remainingTime = nextDrawTime - System.nanoTime(); // sleep
-                remainingTime = remainingTime/100000; // i need ms
-
-                if (remainingTime < 0){
-                    remainingTime = 0;
-                }
-
-                Thread.sleep((long) remainingTime);
-
-                nextDrawTime += drawInterval;
-
-
-
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-
-
-    }*/
-
-    //GAME LOOP the core of the game
-    // https://stackoverflow.com/questions/67594462/java-game-loop-stutters
-    // Delta method
-    // Faster
 
     @Override
     public void run(){
